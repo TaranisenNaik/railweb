@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Details - IRCTC</title>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .passenger-count {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+        }
+
+        .passenger-form {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+        }
+
+        .button {
+            padding: 12px 25px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            margin-top: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Passenger Details</h1>
+            <p>Enter information for all passengers</p>
+        </div>
+
+        <div class="passenger-count">
+            <label>Number of Passengers:</label>
+            <select id="passengerCount" onchange="updatePassengerForms()">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+        <form id="passengerForm" onsubmit="handleSubmit(event)">
+            <div id="passengerFormsContainer"></div>
+            <a type="submit" class="button" style="text-decoration: none; text-align: center;" href="confirm.html">Submit Details</a>
+        </form>
+    </div>
+
+    <script>
+        let passengerCount = 1;
+
+        function createPassengerForm(index) {
+            return `
+                <div class="passenger-form">
+                    <h3>Passenger ${index + 1}</h3>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" required 
+                                name="passengers[${index}].name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Age</label>
+                            <input type="number" required min="1" 
+                                name="passengers[${index}].age">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Gender</label>
+                            <select required name="passengers[${index}].gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Berth Preference</label>
+                            <select name="passengers[${index}].berthPreference">
+                                <option value="">No Preference</option>
+                                <option value="lower">Lower</option>
+                                <option value="middle">Middle</option>
+                                <option value="upper">Upper</option>
+                            </select>
+                        </div>
+                    </div>
+                    ${index > 0 ? 
+                        `<button type="button" class="button remove-btn" 
+                            onclick="removePassengerForm(${index})">Remove Passenger</button>` : ''}
+                </div>
+            `;
+        }
+
+        function updatePassengerForms() {
+            const count = parseInt(document.getElementById('passengerCount').value);
+            const container = document.getElementById('passengerFormsContainer');
+            
+            // Add new forms if count increased
+            while(passengerCount < count) {
+                container.innerHTML += createPassengerForm(passengerCount);
+                passengerCount++;
+            }
+            
+            // Remove forms if count decreased
+            while(passengerCount > count) {
+                container.lastChild.remove();
+                passengerCount--;
+            }
+        }
+
+        function removePassengerForm(index) {
+            document.getElementById('passengerCount').value = passengerCount - 1;
+            updatePassengerForms();
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const passengers = [];
+            
+            for(let i = 0; i < passengerCount; i++) {
+                passengers.push({
+                    name: formData.get(`passengers[${i}].name`),
+                    age: formData.get(`passengers[${i}].age`),
+                    gender: formData.get(`passengers[${i}].gender`),
+                    berthPreference: formData.get(`passengers[${i}].berthPreference`)
+                });
+            }
+            
+            // Here you would typically send data to server
+            console.log('Passenger Data:', passengers);
+            alert('Passenger details submitted successfully!\nCheck console for data');
+        }
+
+        // Initialize first passenger form
+        document.getElementById('passengerFormsContainer').innerHTML = createPassengerForm(0);
+    </script>
+</body>
+</html>

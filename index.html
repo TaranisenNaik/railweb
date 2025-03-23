@@ -3,32 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Train Booking System</title>
+    <title>Welcome TO IRCTC</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
     <style>
-        body {
+         body {
             background: url('bg.jpg') no-repeat left center fixed;
             background-size: cover;
         }
 
-        /* Navbar styling */
         .navbar {
-            background: rgba(0, 0, 0, 0.7); /* Semi-transparent navbar */
+            background:rgba(135, 206, 235, 0.3) !important;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .navbar:hover {
+            background-color: rgba(255, 255, 255, 0.9) !important;
         }
 
         .navbar .nav-link, .navbar .navbar-brand, .navbar .btn {
-            color: rgb(47, 181, 248) !important;
+            color: black !important;
+            font-weight: bold;
         }
 
         .navbar .nav-link:hover {
-            color: black !important;
+            color: skyblue !important;
         }
 
-        /* Centered Form */
         .train-booking-form {
             background: rgba(255, 255, 255, 0.9);
             padding: 20px;
@@ -38,6 +44,7 @@
             max-width: 600px;
         }
         .booking-container {
+            
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             padding: 20px;
@@ -45,52 +52,145 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .form-control, .form-select {
-            border-radius: 8px;
-        }
-
-        .btn-primary {
+        .mySwiper {
+            
             width: 100%;
-            border-radius: 8px;
-            background-color: #0056b3;
-            border: none;
+            max-width: 900px;
+            height: 500px;
+            padding: 50px 0;
         }
-
-        .btn-primary:hover {
-            background-color: #00408a;
+        .swiper-slide {
+            margin-top: 50px;
+            background-position: center;
+            background-size: cover;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
         }
-
-        .trip-options label {
-            margin-right: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .trip-options input {
-            margin-right: 5px;
-        }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s ease-in-out forwards;
-        }
-
-        /* Keyframes for smooth fade-in effect */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Button hover effect */
-        .btn:hover {
+        .swiper-slide:hover {
             transform: scale(1.05);
-            transition: all 0.3s ease-in-out;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .slide-caption {
+            position: absolute;
+            bottom: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            width: 90%;
+            font-weight: bold;
+        }
+        .offer-slider-container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px 0;
+        }
+        .offer-custom-slider {
+            width: 100%;
+            padding-bottom: 50px;
+        }
+        .offer-custom-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 180px; /* Uniform height */
+        }
+        .offer-icon-container {
+            width: 25%; /* Auto-responsive */
+            max-width: 100px;
+            min-width: 60px;
+            aspect-ratio: 1/1; /* Ensures a perfect circle */
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5vw; /* Dynamic scaling */
+            font-weight: bold;
+            color: black;
+            margin-bottom: 10px;
+        }
+        .offer-custom-text {
+            font-size: 1.2vw;
+            font-weight: bold;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        .offer-next-button, .offer-prev-button {
+            color: #007bff;
+            top: 50%;
+        transform: translateY(-50%);
+        }
+
+        /* Hide Arrows on Mobile */
+        @media (max-width: 768px) {
+            
+            .offer-custom-slide {
+                height: 160px;
+                padding: 12px;
+            }
+            .offer-icon-container {
+                width: 30%;
+                max-width: 90px;
+                font-size: 4vw;
+            }
+            .offer-custom-text {
+                font-size: 3vw;
+            }
+        }
+        @media (max-width: 480px) {
+            .swiper-button-next, .swiper-button-prev {
+                display: none !important;
+            }
+            .offer-custom-slide {
+                height: 140px;
+                padding: 10px;
+            }
+            .offer-icon-container {
+                width: 35%;
+                max-width: 80px;
+                font-size: 4.5vw;
+            }
+            .offer-custom-text {
+                font-size: 3.5vw;
+            }
+        }
+        @media (max-width: 400px) {
+            .swiper-button-next, .swiper-button-prev {
+                display: none !important;
+            }
+            .offer-custom-slide {
+                height: 130px;
+                padding: 8px;
+            }
+            .offer-icon-container {
+                width: 40%;
+                max-width: 70px;
+                font-size: 5vw;
+            }
+            .offer-custom-text {
+                font-size: 4vw;
+            }
         }
     </style>
 </head>
@@ -109,26 +209,31 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav mx-auto">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="bookingDropdown" role="button" data-bs-toggle="dropdown">
                         Booking
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Hotel</a></li>
+                        <li><a class="dropdown-item" href="#">Flight</a></li>
                         <li><a class="dropdown-item" href="#">Bus</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Train</a>
+                    <a class="nav-link" href="list.html">List</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Holiday</a>
+                    <a class="nav-link" href="track.html">Live Status</a>
                 </li>
+                
             </ul>
 
             <!-- Sign In Button -->
-            <a href="#" class="btn btn-outline-info">Sign In</a>
+            <a href="signin.html" class="btn btn-outline-info">Sign In</a>
         </div>
     </div>
 </nav>
@@ -141,11 +246,11 @@
 
         <!-- PNR & Chart Buttons -->
         <div class="row mt-3">
-            <div class="col-6 d-flex justify-content-center" data-aos="zoom-in">
-                <button type="submit" class="btn btn-primary">PNR</button>
+            <div class="col-6 d-flex justify-content-center " >
+                <button type="submit" class="btn btn-primary btn-lg btn-block">PNR</button>
             </div>
-            <div class="col-6 d-flex justify-content-center" data-aos="zoom-in">
-                <button type="submit" class="btn btn-primary">Chart</button>
+            <div class="col-6 d-flex justify-content-center">
+                <button type="submit" class="btn btn-lg btn-primary">Chart</button>
             </div>
         </div>
 
@@ -200,19 +305,19 @@
                     <div class="row g-3">
                         <div class="col-6 col-md-3 d-flex justify-content-center">
                             <input class="form-check-input" type="checkbox" id="checkbox1">
-                            <label class="form-check-label ms-2" for="checkbox1">Check me out</label>
+                            <label class="form-check-label ms-2" for="checkbox1">Person With Disability Concession</label>
                         </div>
                         <div class="col-6 col-md-3 d-flex justify-content-center" >
                             <input class="form-check-input" type="checkbox" id="checkbox2">
-                            <label class="form-check-label ms-2" for="checkbox2">Check me out</label>
+                            <label class="form-check-label ms-2" for="checkbox2">Flexible With Date</label>
                         </div>
                         <div class="col-6 col-md-3 d-flex justify-content-center" >
                             <input class="form-check-input" type="checkbox" id="checkbox3">
-                            <label class="form-check-label ms-2" for="checkbox3">Check me out</label>
+                            <label class="form-check-label ms-2" for="checkbox3">Train with Available Berth</label>
                         </div>
                         <div class="col-6 col-md-3 d-flex justify-content-center" >
                             <input class="form-check-input" type="checkbox" id="checkbox4">
-                            <label class="form-check-label ms-2" for="checkbox4">Check me out</label>
+                            <label class="form-check-label ms-2" for="checkbox4">Railway Pass Concession</label>
                         </div>
                     </div>
                 </div>
@@ -220,10 +325,10 @@
                 <!-- Search Buttons -->
                 <div class="row mt-4">
                     <div class="col-6 d-flex justify-content-center" >
-                        <button class="btn btn-outline-info" type="submit">Search</button>
+                        <a class="btn btn-outline-info" type="submit" href="list.html">Search</a>
                     </div>
                     <div class="col-6 d-flex justify-content-center" >
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <a class="btn btn-outline-success" type="submit" href="list.html">Book</a>
                     </div>
                 </div>
 
@@ -232,14 +337,346 @@
     </div>
 </div>
 
+
+
+<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
+
+
+<div class="offer-slider-container">
+    <h2 style=" text-align: center; color: rgb(107, 162, 240);">Find a service suitable for you here.</h2>
+    <div class="swiper offer-custom-slider">
+        <div class="swiper-wrapper offer-swiper-wrapper">
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">✈</div>
+                <p class="offer-custom-text">FLIGHTS</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🏨</div>
+                <p class="offer-custom-text">HOTELS</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🚆</div>
+                <p class="offer-custom-text">RAIL DRISHTI</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🍽</div>
+                <p class="offer-custom-text">E-CATERING</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🚌</div>
+                <p class="offer-custom-text">BUS</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🏝</div>
+                <p class="offer-custom-text">HOLIDAY PACKAGES</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🚂</div>
+                <p class="offer-custom-text">TOURIST TRAIN</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">⛰</div>
+                <p class="offer-custom-text">HILL RAILWAYS</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🚋</div>
+                <p class="offer-custom-text">CHARTER TRAIN</p>
+            </div>
+            <div class="swiper-slide offer-custom-slide">
+                <div class="offer-icon-container">🖼</div>
+                <p class="offer-custom-text">GALLERY</p>
+            </div>
+        </div>
+        
+        <!-- Navigation Buttons (Hidden on Mobile) -->
+        <div class="swiper-button-next offer-next-button"></div>
+        <div class="swiper-button-prev offer-prev-button"></div>
+
+        <!-- Pagination -->
+        <div class="swiper-pagination offer-swiper-pagination"></div>
+    </div>
+</div>
+<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
+
+<div class="d-flex justify-content-center">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="images/maharaja.jpg" alt="Special Pizza">
+                <div class="slide-caption">Maharaja Express</div>
+            </div>
+            <div class="swiper-slide">
+                <img src="images/international.jpg" alt="Meat Ball">
+                <div class="slide-caption">International Packages</div>
+            </div>
+            <div class="swiper-slide">
+                <img src="images/railtour.jpg" alt="Burger">
+                <div class="slide-caption">Rail Tour Packages</div>
+            </div>
+            <div class="swiper-slide">
+                <img src="images/domestic.jpg" alt="Fish Curry">
+                <div class="slide-caption">Domestic Air Packages</div>
+            </div>
+            <div class="swiper-slide">
+                <img src="images/gaurav.jpg" alt="Fish Curry">
+                <div class="slide-caption">Bharat Gaurav Tourist Train</div>
+            </div>
+            
+        </div>
+        <div class="swipe-button-next swiper-button-next"></div>
+        <div class="swipe-button-next swiper-button-prev"></div>
+        <div class="swipe-button-next swiper-pagination"></div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
+<div class="container my-5">
+    <!-- Footer -->
+    <footer
+            class="text-center text-lg-start text-white"
+            style="background-color: #929fba"
+            >
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: Links -->
+        <section class="">
+          <!--Grid row-->
+          <div class="row">
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                
+                <p>
+                  <a class="text-white">IRCTC Trains</a>
+                </p>
+                <p>
+                  <a class="text-white">General Information</a>
+                </p>
+                <p>
+                  <a class="text-white">Important Information</a>
+                </p>
+                <p>
+                  <a class="text-white">Agents</a>
+                </p>
+              </div>
+  
+            <hr class="w-100 clearfix d-md-none" />
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                <p>
+                    <a class="text-white">IRCTC Trains</a>
+                  </p>
+                  <p>
+                    <a class="text-white">General Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Important Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Agents</a>
+                  </p>
+              </div>
+  
+            <hr class="w-100 clearfix d-md-none" />
+  
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                <p>
+                    <a class="text-white">IRCTC Trains</a>
+                  </p>
+                  <p>
+                    <a class="text-white">General Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Important Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Agents</a>
+                  </p>
+            </div>
+            <!-- Grid column -->
+  
+            <hr class="w-100 clearfix d-md-none" />
+  
+            <!-- Grid column -->
+            <hr class="w-100 clearfix d-md-none" />
+  
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                <p>
+                    <a class="text-white">IRCTC Trains</a>
+                  </p>
+                  <p>
+                    <a class="text-white">General Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Important Information</a>
+                  </p>
+                  <p>
+                    <a class="text-white">Agents</a>
+                  </p>
+            </div>
+            <!-- Grid column -->
+  
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                <div class="justify-content-center"><h6 class="text-uppercase mb-4 font-weight-bold ">Follow us</h6></div>
+              
+  
+              <!-- Facebook -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #3b5998"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-facebook"></i
+                ></a>
+  
+              <!-- Twitter -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #55acee"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-twitter"></i
+                ></a>
+  
+              <!-- Google -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #dd4b39"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-youtube"></i
+                ></a>
+  
+              <!-- Instagram -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #ac2bac"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-instagram"></i
+                ></a>
+  
+              <!-- Linkedin -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #0082ca"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-linkedin"></i
+                ></a>
+              <!-- Github -->
+              <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #55acee"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-telegram"></i
+                ></a>
+                
+                
+                <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #139026"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-whatsapp"></i
+                ></a>
+                <a
+                 class="btn btn-primary btn-floating m-1"
+                 style="background-color: #ed7459"
+                 href="#!"
+                 role="button"
+                 ><i class="bi bi-pinterest"></i
+                ></a>
+                
+            </div>
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-2">
+                <div class="justify-content-center"><h6 class="text-uppercase mb-4 font-weight-bold ">App</h6></div>
+                <img  style="width: 100px;
+    height: 100px" src="images/qr.png" alt="qr">
+            </div>
+          </div>
+          <!--Grid row-->
+        </section>
+        <!-- Section: Links -->
+      </div>
+      <!-- Grid container -->
+  
+      <!-- Copyright -->
+      <div
+           class="text-center p-3"
+           style="background-color: rgba(0, 0, 0, 0.2)"
+           >
+        © 2025 Copyright:
+        <a class="text-white" href="#">Taranisen Naik</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+  </div>
+
+<!-- Bootstrap JS -->
+<!-- Bootstrap JS -->
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- AOS JS -->
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script>
     AOS.init(); // Initialize AOS animations
+    var swiper = new Swiper(".mySwiper", {
+        effect: "coverflow",
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 200,
+            modifier: 1.5,
+            slideShadows: true,
+        },
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".swipe-button-next",
+            prevEl: ".swipe-button-prev",
+        },
+        pagination: {
+            el: ".swipe-pagination",
+            clickable: true,
+        },
+    });
+    
 </script>
-
+<script>
+    var swiper = new Swiper(".offer-custom-slider", {
+        slidesPerView: 4,  // Always show 4 slides on all devices
+        spaceBetween: 20,
+        
+        grabCursor: true,
+        centeredSlides: true,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".offer-next-button",
+            prevEl: ".offer-prev-button",
+        },
+        pagination: {
+            el: ".offer-swiper-pagination",
+            clickable: true,
+        }
+    });
+</script>
 </body>
 </html>

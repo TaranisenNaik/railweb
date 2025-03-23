@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Train Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #1e40af;
+      --background-gradient: linear-gradient(135deg, #1a1b1f 0%, #2d2f36 100%);
+    }
+    body {
+      background: var(--background-gradient);
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .glass-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      margin: 2rem auto;
+    }
+    .track-container {
+      position: relative;
+      height: 1000px;
+      max-width: 800px;
+      width: 100%;
+      margin: 2rem auto;
+    }
+    .railway-track {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 100%;
+      width: 8px;
+      background: var(--primary-color);
+      opacity: 0.8;
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.3) 10%,
+        transparent 10%,
+        transparent 20%
+      );
+      background-size: 8px 20px;
+      transition: left 0.3s;
+    }
+    .train-icon {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.7));
+      z-index: 2;
+      transition: top 6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .station {
+      position: absolute;
+      transform: translateY(-50%);
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      width: 320px;
+      min-height: 140px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      gap: 1rem;
+    }
+    /* Desktop positioning: alternate left positions */
+    .station:nth-child(odd) {
+      left: calc(50% + 60px);
+      flex-direction: row;
+    }
+    .station:nth-child(even) {
+      left: calc(50% - 380px);
+      flex-direction: row-reverse;
+    }
+    .station::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 14px;
+      height: 14px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+    }
+    .station:nth-child(odd)::before {
+      left: -40px;
+    }
+    .station:nth-child(even)::before {
+      right: -40px;
+    }
+    .current-station::before {
+      background: #10b981;
+      width: 18px;
+      height: 18px;
+    }
+    .station-info {
+      flex: 1;
+    }
+    .station-meta {
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .time-badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .delay {
+      color: #ef4444;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .platform-tag {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+    .weather-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      opacity: 0.8;
+    }
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      /* Make stations stack and add vertical space */
+      .station {
+        position: relative;
+        left: 0 !important;
+        transform: translateY(0) !important;
+        width: 90%;
+        margin: 20px auto;
+      }
+      .station:nth-child(odd),
+      .station:nth-child(even) {
+        flex-direction: column;
+        align-items: center;
+      }
+      .station::before {
+        position: relative;
+        margin-bottom: 10px;
+      }
+      /* Shift the track to the left */
+      .railway-track {
+        left: 10%;
+        transform: translateX(0);
+      }
+      /* Let container height adjust */
+      .track-container {
+        height: auto;
+        padding-bottom: 20px;
+      }
+      /* Keep the train icon absolute so JS can set its position based on DOM offsets */
+      .train-icon {
+        position: absolute;
+        left: 10%; /* Align with the track */
+        transform: translate(-50%, -50%);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        
+        <img src="Railway-logo.png" alt="Logo 2" width="40" height="40">
+    </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+              aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item mx-2"><a class="nav-link " href="index.html">Home</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="list.html">Train Booking</a></li>
+            <li class="nav-item mx-2"><a class="nav-link active" href="#">Live status</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="#">News</a></li>
+            
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <form class="d-flex ms-auto" style="margin-top: 10px;" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search stations" aria-label="Search" />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    <div class="glass-container">
+      <div class="track-container" id="trackContainer">
+        <div class="railway-track"></div>
+        <div class="train-icon" id="train">🚂</div>
+        <!-- Stations will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample train data
+    const trains = [
+      {
+        number: '12839',
+        name: 'HOWRAH - PURI MAIL',
+        currentStationIndex: 2,
+        stations: [
+          {
+            name: "HOWRAH JN",
+            code: "HWH",
+            distance: 0,
+            position: 5,
+            platform: "Platform 5",
+            scheduled: { arrive: "22:45", depart: "22:45" },
+            actual: { arrive: "22:45", depart: "22:45" },
+            delayReason: "On time",
+            weather: "☀️ 32°C"
+          },
+          {
+            name: "KHARAGPUR JN",
+            code: "KGP",
+            distance: 116,
+            position: 18,
+            platform: "Platform 2",
+            scheduled: { arrive: "00:55", depart: "01:00" },
+            actual: { arrive: "01:10", depart: "01:15" },
+            delayReason: "Signal delay",
+            weather: "🌙 28°C"
+          },
+          {
+            name: "BHUBANESWAR",
+            code: "BBS",
+            distance: 437,
+            position: 35,
+            platform: "Platform 3",
+            scheduled: { arrive: "05:25", depart: "05:30" },
+            actual: { arrive: "05:45", depart: "05:50" },
+            delayReason: "Congestion",
+            weather: "⛅ 30°C"
+          },
+          {
+            name: "PURI",
+            code: "PUR",
+            distance: 883,
+            position: 55,
+            platform: "Platform 1",
+            scheduled: { arrive: "12:00", depart: "12:10" },
+            actual: { arrive: "12:25", depart: "12:30" },
+            delayReason: "Maintenance",
+            weather: "☀️ 34°C"
+          }
+        ]
+      }
+    ];
+    
+    let currentTrain = trains[0];
+
+    function initializeTrack() {
+      const container = document.getElementById('trackContainer');
+      // Reset container content
+      container.innerHTML = `
+        <div class="railway-track"></div>
+        <div class="train-icon" id="train">🚂</div>
+      `;
+      // Add each station element
+      currentTrain.stations.forEach((station, index) => {
+        const stationEl = document.createElement('div');
+        // On desktop, use absolute positioning via percentage; on mobile, the media query overrides this
+        stationEl.className = `station ${index === currentTrain.currentStationIndex ? 'current-station' : ''}`;
+        stationEl.style.top = `${station.position}%`;
+        const delay = calculateDelay(station.scheduled.depart, station.actual.depart);
+        stationEl.innerHTML = `
+          <div class="station-meta">
+            <div class="time-badge">${station.distance} km</div>
+            <div class="platform-tag">${station.platform}</div>
+            <div class="weather-info">${station.weather}</div>
+          </div>
+          <div class="station-info">
+            <h5 class="mb-2">${station.name} (${station.code})</h5>
+            <div class="text-sm">
+              <div>Scheduled: ${station.scheduled.arrive} - ${station.scheduled.depart}</div>
+              <div class="${delay ? 'delay' : ''}">
+                Actual: ${station.actual.arrive} - ${station.actual.depart}
+                ${delay ? `(+${delay}m)` : ''}
+              </div>
+            </div>
+            ${delay ? `<div class="text-sm mt-2">Delay Reason: ${station.delayReason}</div>` : ''}
+          </div>
+        `;
+        container.appendChild(stationEl);
+      });
+      // Animate the train icon based on device width
+      animateTrain();
+    }
+
+    function animateTrain() {
+      const trainElement = document.getElementById('train');
+      // For mobile devices, position the train based on the current station's actual DOM position.
+      if (window.innerWidth <= 768) {
+        const currentStationEl = document.querySelector('.station.current-station');
+        if (currentStationEl) {
+          const targetPosition = currentStationEl.offsetTop + currentStationEl.offsetHeight / 2;
+          trainElement.style.top = `${targetPosition}px`;
+        }
+      } else {
+        // On larger screens, use the pre-set percentage values.
+        const startPosition = currentTrain.stations[0].position;
+        const targetPosition = currentTrain.stations[currentTrain.currentStationIndex].position;
+        trainElement.style.top = `${startPosition}%`;
+        // Force reflow
+        void trainElement.offsetHeight;
+        trainElement.style.top = `${targetPosition}%`;
+      }
+    }
+
+    function calculateDelay(scheduled, actual) {
+      if (actual === "END" || scheduled === "END") return 0;
+      const [schedH, schedM] = scheduled.split(':');
+      const [actualH, actualM] = actual.split(':');
+      return (actualH - schedH) * 60 + (actualM - schedM);
+    }
+
+    // Initial load
+    initializeTrack();
+
+    // Optionally, re-run animateTrain on window resize (e.g., to reposition the train icon)
+    window.addEventListener('resize', animateTrain);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
